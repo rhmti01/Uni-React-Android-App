@@ -1,11 +1,15 @@
 /* eslint-disable react/prop-types */
-function UsersCards({ cards , onHandleRemoveCard}) {
+function UsersCards({ cards, onHandleRemoveCard }) {
   console.log(cards);
 
   return (
-    <div className=" w-10/11 mx-auto mt-4 rounded-xl flex flex-col bg-gray-300 py-2 px-3 mb-10 z-10 ">
+    <div className=" w-10/11 mx-auto mt-4 rounded-xl flex flex-col bg-gray-300 py-2 px-3 mb-10 z-10  ">
       {cards.map((card) => (
-        <UserCardsData onHandleRemoveCard={onHandleRemoveCard} key={card.id} card={card} />
+        <UserCardsData
+          onHandleRemoveCard={onHandleRemoveCard}
+          key={card.id}
+          card={card}
+        />
       ))}
     </div>
   );
@@ -13,14 +17,16 @@ function UsersCards({ cards , onHandleRemoveCard}) {
 
 export default UsersCards;
 
-function UserCardsData({ card , onHandleRemoveCard }) {
+function UserCardsData({ card, onHandleRemoveCard }) {
   console.log(card);
 
   const persianDegree = (degree) => {
     if (degree === "master") {
       return "کارشناسی ارشد";
-    } else {
+    } else if (degree == "bachelor") {
       return "کارشناسی";
+    } else {
+      return "دکتری";
     }
   };
 
@@ -32,9 +38,37 @@ function UserCardsData({ card , onHandleRemoveCard }) {
     }
   };
 
+  function conv2EnNum(str) {
+    return (
+      parseFloat(
+        str
+          .replace(/[٠١٢٣٤٥٦٧٨٩]/g, function (d) {
+            return d.charCodeAt(0) - 1632;
+          }) // Convert Arabic numbers
+          .replace(/[۰۱۲۳۴۵۶۷۸۹]/g, function (d) {
+            return d.charCodeAt(0) - 1776;
+          }) // Convert Persian numbers
+      ) * 1
+    );
+  }
+
+    const toFarsiNumber = (n) => {
+    const farsiDigits = ["۰", "۱", "۲", "۳", "۴", "۵", "۶", "۷", "۸", "۹"];
+
+    return n.toString().replace(/\d/g, (x) => farsiDigits[x]);
+  };
+
+  const persianExpireYear = toFarsiNumber(conv2EnNum(card.applyYear) + 4)
+
   return (
-    <div className=" flex justify-between items-start flex-row-reverse w-full p-2 bg-sky-50 rounded-lg my-1 relative ">
-      <button onClick={()=>onHandleRemoveCard(card)} className=" absolute bottom-2 left-2 ">
+    <div className=" flex justify-between items-start flex-row-reverse w-full p-2 bg-sky-50 rounded-lg my-1 relative  ">
+      <p className=" absolute rotate-90 -left-[25.3px] h-4 rounded-t-sm px-1 text-[12px] flex items-start bg-slate-700 top-[102px] text-white ">
+        <span>اعتبار تا {persianExpireYear}</span>
+      </p>
+      <button
+        onClick={() => onHandleRemoveCard(card)}
+        className=" absolute bottom-2 left-2 "
+      >
         <svg
           xmlns="http://www.w3.org/2000/svg"
           fill="none"
@@ -73,6 +107,9 @@ function UserCardsData({ card , onHandleRemoveCard }) {
         </h3>
         <h3 className=" text-slate-700  font-medium mt-2 text-[15px] ">
           <span>شماره دانشجویی : </span> {card.studentNumber}
+        </h3>
+        <h3 className=" text-slate-700  font-medium mt-2 text-[15px] ">
+          <span>سال ورودی : {card.applyYear}</span>
         </h3>
         <h3 className=" text-slate-700 font-medium mt-2 text-[15px]  ">
           <span>مقطع : </span> {persianDegree(card.degree)}

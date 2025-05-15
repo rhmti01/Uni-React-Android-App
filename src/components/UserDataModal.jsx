@@ -6,20 +6,21 @@ function UserDataModal({ onAddCard, setModal }) {
   const [fullName, setFullName] = useState("");
   const [fieldStudy, setFieldStudy] = useState("");
   const [studentNumber, setStudentNumber] = useState("");
+  const [applyYear, setApplyYear] = useState("");
   const [degree, setDegree] = useState(null);
   const [duplicateCard, setDuplicateCard] = useState(false);
 
   const onHandleSubmit = (e) => {
     e.preventDefault();
 
-    if (!fullName || !fieldStudy || !studentNumber || !degree )
-      return
-    
+    if (!fullName || !fieldStudy || !studentNumber || !degree) return;
+
     const newCard = {
       fullName,
       fieldStudy,
       studentNumber,
       degree,
+      applyYear,
       duplicateCard,
       id: Date.now(),
       createdAt: new Date().toISOString(),
@@ -28,6 +29,7 @@ function UserDataModal({ onAddCard, setModal }) {
     setFullName("");
     setFieldStudy("");
     setStudentNumber("");
+    setApplyYear("");
     setDegree(null);
     setDuplicateCard(false);
 
@@ -36,16 +38,13 @@ function UserDataModal({ onAddCard, setModal }) {
   };
 
   const toFarsiNumber = (n) => {
-    const farsiDigits = ['۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹'];
+    const farsiDigits = ["۰", "۱", "۲", "۳", "۴", "۵", "۶", "۷", "۸", "۹"];
 
-    return n
-        .toString()
-        .replace(/\d/g, x => farsiDigits[x]);
-}
+    return n.toString().replace(/\d/g, (x) => farsiDigits[x]);
+  };
 
   return (
     <div className="fixed inset-0  z110  flex items-center justify-center z-50 ">
-
       {/* space out of div */}
       <div
         onClick={() => setModal(false)}
@@ -102,6 +101,16 @@ function UserDataModal({ onAddCard, setModal }) {
           />
         </div>
 
+        <div className=" mt-3 ">
+          <input
+            className="w-full  py-2.5 px-3 border border-stone-300  mx-auto  mt-1  rounded-[10px] outline-none focus:shadow-lg  focus:border-indigo-600   "
+            onChange={(e) => setApplyYear(toFarsiNumber(e.target.value))}
+            value={applyYear}
+            placeholder="سال ورودی"
+            id="applyYear"
+          />
+        </div>
+
         <div className=" w-full flex justify-around items-center mt-6">
           <div className="flex items-center ">
             <input
@@ -134,7 +143,24 @@ function UserDataModal({ onAddCard, setModal }) {
               htmlFor="default-radio-2"
               className="ms-2  font-medium text-gray-800 "
             >
-              کارشناسی ارشد
+              ارشد
+            </label>
+          </div>
+          <div className="flex items-center">
+            <input
+              value="phd"
+              checked={degree === "phd"}
+              onChange={() => setDegree("phd")}
+              id="default-radio-2"
+              type="radio"
+              name="default-radio"
+              className="w-5 h-5 text-blue-600 bg-gray-100 border-gray-300  "
+            />
+            <label
+              htmlFor="default-radio-2"
+              className="ms-2  font-medium text-gray-800 "
+            >
+              دکتری
             </label>
           </div>
         </div>
