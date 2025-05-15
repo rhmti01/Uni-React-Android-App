@@ -1,8 +1,6 @@
 /* eslint-disable react/prop-types */
 
-function AddUserBtn({ modal, setModal }) {
-
-  console.log(modal)
+function AddUserBtn({ modal, setModal  }) {
 
   return (
     <div className=" bottom-4 right-4 absolute ">
@@ -15,7 +13,7 @@ function AddUserBtn({ modal, setModal }) {
           fill="none"
           viewBox="0 0 24 24"
           stroke="currentColor"
-          className="size-5 stroke-3 stroke-white shadow-2xl "
+          className="size-8 stroke-3 stroke-white shadow-2xl "
         >
           <path d="M12 4.5v15m7.5-7.5h-15" />
         </svg>

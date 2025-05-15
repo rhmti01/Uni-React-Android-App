@@ -1,6 +1,40 @@
 /* eslint-disable react/prop-types */
 
-function UserDataModal({ setModal }) {
+import { useState } from "react";
+
+function UserDataModal({ onAddCard, setModal }) {
+  const [fullName, setFullName] = useState("");
+  const [fieldStudy, setFieldStudy] = useState("");
+  const [studentNumber, setStudentNumber] = useState("");
+  const [degree, setDegree] = useState(null);
+  const [duplicateCard, setDuplicateCard] = useState(false);
+
+  const onHandleSubmit = (e) => {
+    e.preventDefault();
+
+    if (!fullName || !fieldStudy || !studentNumber || !degree || !duplicateCard)
+      return;
+
+    const newCard = {
+      fullName,
+      fieldStudy,
+      studentNumber,
+      degree,
+      duplicateCard,
+      id: Date.now(),
+      createdAt: new Date().toISOString(),
+    };
+
+    setFullName("");
+    setFieldStudy("");
+    setStudentNumber("");
+    setDegree(null);
+    setDuplicateCard(false);
+
+    onAddCard(newCard);
+    setModal(false);
+  };
+
   return (
     <div className="fixed inset-0  z110  flex items-center justify-center">
       {/* space out of div */}
@@ -9,7 +43,10 @@ function UserDataModal({ setModal }) {
         className="  cursor-pointer  inset-0 absolute bg-black/55  w-full h-screen z-50  "
       ></div>
 
-      <div className="  rr:scale-[0.82] ss:scale-[0.80] bg-gray-100 border-1 border-gray-300 p-7 rounded-2xl  w-[350px] z-50  ">
+      <form
+        onSubmit={(e) => onHandleSubmit(e)}
+        className="  rr:w-[360px] ss:w-[320px] bg-gray-100 border-1 border-gray-300 p-7 rounded-2xl  z-50  "
+      >
         <h2 className="text-gray-900  text-center text-2xl font-bold flex items-center justify-center gap-x-3 ">
           کارت جامع دانشجویی
           <svg
@@ -29,6 +66,8 @@ function UserDataModal({ setModal }) {
         </h2>
         <div className="mt-8 ">
           <input
+            value={fullName}
+            onChange={(e) => setFullName(e.target.value)}
             placeholder="نام و نام خانوادگی"
             dir="rtl"
             type="text"
@@ -37,6 +76,8 @@ function UserDataModal({ setModal }) {
         </div>
         <div className="mt-3">
           <input
+            value={fieldStudy}
+            onChange={(e) => setFieldStudy(e.target.value)}
             type="text"
             placeholder="رشته تحصیلی"
             className="w-full  py-2.5 px-3 border border-stone-300  mx-auto  mt-1  rounded-[10px] outline-none focus:shadow-lg  focus:border-indigo-600   "
@@ -44,6 +85,8 @@ function UserDataModal({ setModal }) {
         </div>
         <div className="mt-3">
           <input
+            value={studentNumber}
+            onChange={(e) => setStudentNumber(e.target.value)}
             placeholder="شماره دانشجویی"
             type="text"
             className="w-full  py-2.5 px-3 border border-stone-300  mx-auto  mt-1  rounded-[10px] outline-none focus:shadow-lg  focus:border-indigo-600   "
@@ -53,9 +96,11 @@ function UserDataModal({ setModal }) {
         <div className=" w-full flex justify-around items-center mt-6">
           <div className="flex items-center ">
             <input
+              value="bachelor"
+              checked={degree === "bachelor"}
+              onChange={() => setDegree("bachelor")}
               id="default-radio-1"
               type="radio"
-              value=""
               name="default-radio"
               className="w-5 h-5 text-blue-600 bg-gray-100 border-gray-300   "
             />
@@ -68,10 +113,11 @@ function UserDataModal({ setModal }) {
           </div>
           <div className="flex items-center">
             <input
-              defaultChecked
+              value="master"
+              checked={degree === "master"}
+              onChange={() => setDegree("master")}
               id="default-radio-2"
               type="radio"
-              value=""
               name="default-radio"
               className="w-5 h-5 text-blue-600 bg-gray-100 border-gray-300  "
             />
@@ -90,7 +136,13 @@ function UserDataModal({ setModal }) {
               <span className="ms-3  font-medium text-gray-800 ">
                 آیا کارت المثنی صادر شود؟
               </span>
-              <input type="checkbox" value="" className="sr-only peer" />
+              <input
+                checked={duplicateCard}
+                onChange={() => setDuplicateCard(!duplicateCard)}
+                type="checkbox"
+                value=""
+                className="sr-only peer"
+              />
               <div className="relative w-11 h-6 bg-gray-300 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-200  rounded-full peer  peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all  peer-checked:bg-blue-600 "></div>
             </label>
           </div>
@@ -103,11 +155,14 @@ function UserDataModal({ setModal }) {
           >
             انصراف
           </button>
-          <button className="bg-gradient-to-tr from-indigo-700 to-indigo-600 text-white px-3 py-1.5 rounded-lg cursor-pointer">
+          <button
+            type="submit"
+            className="bg-gradient-to-tr from-indigo-700 to-indigo-600 text-white px-3 py-1.5 rounded-lg cursor-pointer"
+          >
             افزودن
           </button>
         </div>
-      </div>
+      </form>
     </div>
   );
 }
