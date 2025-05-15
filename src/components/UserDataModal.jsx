@@ -1,5 +1,5 @@
 /* eslint-disable react/prop-types */
-
+// import toast, { Toaster } from "react-hot-toast";
 import { useState } from "react";
 
 function UserDataModal({ onAddCard, setModal }) {
@@ -12,9 +12,9 @@ function UserDataModal({ onAddCard, setModal }) {
   const onHandleSubmit = (e) => {
     e.preventDefault();
 
-    if (!fullName || !fieldStudy || !studentNumber || !degree || !duplicateCard)
-      return;
-
+    if (!fullName || !fieldStudy || !studentNumber || !degree )
+      return
+    
     const newCard = {
       fullName,
       fieldStudy,
@@ -35,8 +35,17 @@ function UserDataModal({ onAddCard, setModal }) {
     setModal(false);
   };
 
+  const toFarsiNumber = (n) => {
+    const farsiDigits = ['۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹'];
+
+    return n
+        .toString()
+        .replace(/\d/g, x => farsiDigits[x]);
+}
+
   return (
-    <div className="fixed inset-0  z110  flex items-center justify-center">
+    <div className="fixed inset-0  z110  flex items-center justify-center z-50 ">
+
       {/* space out of div */}
       <div
         onClick={() => setModal(false)}
@@ -86,7 +95,7 @@ function UserDataModal({ onAddCard, setModal }) {
         <div className="mt-3">
           <input
             value={studentNumber}
-            onChange={(e) => setStudentNumber(e.target.value)}
+            onChange={(e) => setStudentNumber(toFarsiNumber(e.target.value))}
             placeholder="شماره دانشجویی"
             type="text"
             className="w-full  py-2.5 px-3 border border-stone-300  mx-auto  mt-1  rounded-[10px] outline-none focus:shadow-lg  focus:border-indigo-600   "

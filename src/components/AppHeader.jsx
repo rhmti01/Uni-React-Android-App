@@ -1,9 +1,10 @@
-function AppHeader() {
+/* eslint-disable react/prop-types */
+function AppHeader({cardsLength}) {
   return (
     <div className=" h-[74px] flex items-center justify-between bg-gray-800 w-[95%] mx-auto mt-3 rounded-2xl px-4  ">
       <h1 className="  font-semibold text-[19px] text-white ">پنل ادمین</h1>
       <p className=" px-2 py-[3px] flex gap-x-1 items-center justify-center bg-gray-700 rounded-lg">
-        <span className=" text-gray-50 mt-1 font-normal text-[13px] ">0</span>
+        <span className=" text-gray-50 mt-1 font-normal text-[13px] ">{cardsLength}</span>
         <svg
           xmlns="http://www.w3.org/2000/svg"
           fill="none"

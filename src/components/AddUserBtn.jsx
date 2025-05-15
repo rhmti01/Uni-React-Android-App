@@ -3,7 +3,7 @@
 function AddUserBtn({ modal, setModal  }) {
 
   return (
-    <div className=" bottom-4 right-4 absolute ">
+    <div className=" bottom-4 right-4 fixed ">
       <button
         onClick={() => setModal(!modal)}
         className=" p-3 bg-gray-700 rounded-2xl "

@@ -9,7 +9,10 @@ import toast, { Toaster } from "react-hot-toast";
 function App() {
   // router states
   const [modal, setModal] = useState(false);
-  const [cards, setCards] = useState([]);
+  const [cards, setCards] = useState(() => {
+    const cards = localStorage.getItem("cards") 
+   return cards ? JSON.parse(cards) : [];
+  });
 
   const handleAddCard = (newCard) => {
     setCards((prevCards) => {
@@ -18,19 +21,26 @@ function App() {
       toast.success(`  کارت ${newCard.fullName}   صادر شد! `);
       return updatedCards;
     });
-    console.log(cards);
+  };
+
+  const onHandleRemoveCard = (removedCard) => {
+    setCards((prevCards) => {
+      const updatedCards = prevCards.filter((crd) => crd.id !== removedCard.id);
+      localStorage.setItem("cards", JSON.stringify(updatedCards));
+      return updatedCards;
+    });
   };
 
   return (
     <>
-      <div className=" flex items-start flex-col w-full relatvie ">
+      <div className=" flex items-start flex-col w-full relative max-w-3xl mx-auto ">
         <Toaster />
         <AddUserBtn card={cards} modal={modal} setModal={setModal} />
-        <AppHeader />
+        <AppHeader cardsLength={cards.length} />
         {modal && (
           <UserDataModal setModal={setModal} onAddCard={handleAddCard} />
         )}
-        {cards.length > 0 ? <UsersCards /> : <EmptyUsers />}
+        {cards.length>0 ? <UsersCards cards={cards} onHandleRemoveCard={onHandleRemoveCard} /> : <EmptyUsers />}
       </div>
     </>
   );
